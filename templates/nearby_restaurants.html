@@ -1,0 +1,30 @@
+{% load static %}
+<html>
+<head>
+    <title>TasteRush</title>
+    <link rel="stylesheet" href="{% static 'css/search.css' %}">
+</head>
+<body>
+    <h1>Nearby Restaurants</h1>
+    <div class="dish-container">
+        {% for entry in nearby_restaurants %}
+            <div class="dish-box">
+                <div class="dish-image">
+                    <img src="{{entry.restaurant.image_url}}" alt="{{ entry.restaurant.name }}">
+                </div>
+                <div class="dish-details">
+                    <h2>{{ entry.restaurant.name }}</h2>
+                    <p>{{ entry.restaurant.description }}</p>
+                    <p>{{entry.distance}}KMs</p>
+                    <h3><a href="{% url 'restaurant_dishes' entry.restaurant.id %}">Dishes</a></h3>
+
+                </div>
+            </div>
+        {% empty %}
+            <p>No dishes found.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
+
+

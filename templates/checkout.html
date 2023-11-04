@@ -1,0 +1,54 @@
+{% load static %}
+<html>
+<head>
+    <title>Checkout - Your Cart</title>
+    <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Your Cart</h1>
+        </div>
+    </header>
+
+    <div class="container cart-content">
+        <!-- Display messages -->
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <div class="order-summary">
+            <h2>Your Order:</h2>
+            <ul>
+                {% for dish in selected_dishes %}
+                    <li>{{ dish.name }} - INR{{ dish.price }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="delivery-charges">
+            <h2>Delivery Charges:</h2>
+            <p>INR{{ delivery_charges }}</p>
+        </div>
+         <div class="total-cost">
+            <h2>Total Cost:</h2>
+            <p>INR{{ total_cost_with_delivery }}</p>
+        </div>
+        <form method="post" action="{% url 'home' %}">
+         {% csrf_token %}
+         <input type="hidden" name="selected_dish_ids" value="{{ selected_dish_ids }}">
+            <button type="submit" class="order-button">Order Now</button>
+        </form>
+        <script>
+            document.getElementById('checkoutForm').addEventListener('submit', function() {
+            alert('Order has been placed successfully!');
+            window.location.href = "{% url 'search_results' %}";
+            return false;  // Prevent the default form submission behavior
+            });
+        </script>
+        </div>
+</body>
+</html>

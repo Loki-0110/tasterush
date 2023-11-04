@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>Cancel Order - TasteRush</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/cancel_order.css' %}">
+</head>
+<body>
+    <div class="cancel-order-container">
+        <h1>Cancel Order</h1>
+        <p>Are you sure you want to cancel the following order?</p>
+        <div class="order-details">
+            <h2>Order {{ order.reference_number }}</h2>
+            <p>Placed on {{ order.time_ordered|date:"F d, Y H:i A" }}</p>
+            <ul>
+                {% for dish in order.dishes.all %}
+                    <li>{{ dish.name }} - Quantity: 1 - Price: ${{ dish.price }}</li>
+                {% endfor %}
+            </ul>
+            {% if order.discounted %}
+                <p>Total Price: ${{ order.total_price }} (Discount applied: -${{ order.discount_amount }})</p>
+            {% else %}
+                <p>Total Price: ${{ order.total_price }}</p>
+            {% endif %}
+        </div>
+        <form method="post" action="{% url 'cancel_order' order.id %}">
+            {% csrf_token %}
+            <button class="cancel-button" type="submit">Yes, Cancel Order</button>
+        </form>
+        <a class="back-link" href="{% url 'my_orders' %}">No, Go Back to My Orders</a>
+    </div>
+</body>
+</html>

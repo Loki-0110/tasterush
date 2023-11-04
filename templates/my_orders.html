@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>TasteRush</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/my_orders.css' %}">
+</head>
+<body>
+    <div class="content">
+        <h3>Your Orders:</h3>
+        <ul>
+            {% for order in user_orders %}
+                <li>
+                    <h4>Order {{ order.reference_number }} - Placed on {{ order.time_ordered|date:"F d, Y H:i A" }}</h4>
+                    <ul>
+                        {% for dish in order.dishes.all %}
+                            <li>
+                                {{ dish.name }} - Quantity: 1 - Price: ${{ dish.price }}
+
+                            </li>
+                        {% endfor %}
+
+                    </ul>
+                    {% if order.discounted %}
+                        <p>Total Price: ${{ order.total_price }} (Discount applied: -${{ order.discount_amount }})</p>
+                    {% else %}
+                        <p>Total Price: ${{ order.total_price }}</p>
+                    {% endif %}
+
+                    <form action="{% url 'cancel_order' order.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit"  >Cancel Order</button>
+                        </form>
+                </li>
+
+            {% endfor %}
+        </ul>
+
+        {% if not user_orders %}
+            <p>You have no orders.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

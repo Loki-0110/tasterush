@@ -1,0 +1,31 @@
+{% load static %}
+<html>
+<head>
+    <title>TasteRush</title>
+    <link rel="stylesheet" href="{% static 'css/search.css' %}">
+</head>
+<body>
+    <div class="dish-container">
+        {% for dish in dishes %}
+            <div class="dish-box">
+                <div class="dish-image">
+                    <img src="{{dish.image_url}}" alt="{{ dish.name }} ">
+                </div>
+                <div class="dish-details">
+                    <h2>{{ dish.name }}</h2>
+                    <h2>{{ dish.price }}</h2>
+                    <p>{{ dish.description }}</p>
+                    <a>{{ dish.restaurant.name }}</a>
+                    <form method="post" action="{% url 'add_to_cart' dish.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="selected_dish_ids" value="{{ dish.id }}">
+                        <button type="submit" class="order-button">Add to cart</button>
+                    </form>
+                </div>
+            </div>
+        {% empty %}
+            <p>No dishes found.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

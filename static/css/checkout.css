@@ -1,0 +1,72 @@
+/* checkout.css */
+body {
+    font-family: Arial, sans-serif;
+    background: url('../checkout.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    color: white; /* Change to white color */
+}
+.container {
+    width: 80%;
+    margin: 0 auto;
+    background-color: black; /* Change container background to black */
+    color: white; /* Change container text color to white */
+}
+header {
+    background-color: #D4AC0D; /* Change to dark yellow color */
+    padding: 20px 0;
+    color: black; /* Change to black color */
+    text-align: center;
+}
+.order-summary ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.order-summary li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.total-cost, .delivery-charges {
+    margin-top: 10px;
+}
+.order-button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #f1c40f; /* Change to yellow color */
+    color: black; /* Change to black color */
+    border: 1px solid black; /* Add border for visibility */
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+.order-button:hover {
+    background-color: #333333; /* Darker shade of black for hover */
+    color: white; /* Adjusted text color for hover */
+}
+.messages {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.messages li {
+    padding: 10px;
+    margin-bottom: 10px;
+    color: white; /* Change to white color */
+}
+.success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: white; /* Change to white color */
+}
+.error {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: white; /* Change to whitecolor*/
+}

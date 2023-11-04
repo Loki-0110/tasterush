@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>TasteRush</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/my_cart.css' %}">
+</head>
+<body>
+    <div class="cart-container">
+        <h2>Your Cart</h2>
+        <ul>
+            {% for dish in cart_items %}
+                <li>{{ dish.name }} - ${{ dish.price }}</li>
+            {% empty %}
+                <p>Your cart is empty.</p>
+            {% endfor %}
+        </ul>
+
+        {% if cart_items %}
+            <p class="total-price">Total Price: $<span id="total-price">{{ total|floatformat:"2" }}</span></p>
+            {% if discount_amount > 0 %}
+                <p class="discount">Discount (20% off): -$<span id="discount-amount">{{ discount_amount|floatformat:"2" }}</span></p>
+            {% endif %}
+            <button class="order-button" id="order-now">Order Now</button>
+        {% endif %}
+    </div>
+
+    <script>
+        // JavaScript to calculate the total price and apply discount
+        var total = parseFloat("{{ total|floatformat:"2" }}");
+
+        document.getElementById('total-price').textContent = total.toFixed(2);
+
+        // Add event listener to the "Order Now" button
+        document.getElementById('order-now').addEventListener('click', function() {
+            // Redirect to the order_now view
+            window.location.href = "{% url 'order_now' %}";
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+            TasteRush
+        {% endblock %}
+    </title>
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+
+<div class="navbar">
+    <div class="container">
+
+        <a href="{% url 'home' %}">Home</a>
+        <div class="dropdown">
+            <a href="#">Menu &#9662;</a>
+            <div class="dropdown-content">
+                <a href="{% url 'disp_dishes' %}">Dishes</a>
+                <a id="nearby-restaurants-link" href="#">Restaurants</a>
+            </div>
+        </div>
+        {% if request.session.user_id %}
+            <a href="{% url 'my_cart' %}">My cart</a>
+            <a href="{% url 'my_orders' %}">My orders</a>
+            <a href="{% url 'logout' %}">Logout</a>
+            <a href="">{{ request.user.username }}</a>
+        {% else %}
+            <div class="dropdown">
+                <a href="#">Register &#9662;</a>
+                <div class="dropdown-content">
+                    <a href="{% url 'user_signup' %}">User signup</a>
+                    <a href="{% url 'add_restaurant' %}">Add Restaurant</a>
+                </div>
+
+            </div>
+        <div class="dropdown">
+            <a href="#">Login &#9662;</a>
+                <div class="dropdown-content">
+                    <a href="{% url 'user_login' %}">User Login</a>
+                    <a href="{% url 'restaurant_login' %}">Restaurant Login</a>
+                </div>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="search-bar">
+        <form action="{% url 'search_results' %}" method="get">
+            <input type="search" name="q" placeholder="Search for a dish...">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="location-bar">
+        <p><span id="current-location">Loading...</span></p>
+    </div>
+
+
+</div>
+<!--<div class="popular-dishes">-->
+<!--    <h2>Popular Dishes</h2>-->
+<!--    <div class="dish-container">-->
+<!--        {% for dish in popular_dishes %}-->
+<!--            <div class="dish-box">-->
+<!--                <div class="dish-image">-->
+<!--                    <img src="{{dish.image_url}}" alt="{{ dish.name }} ">-->
+<!--                </div>-->
+<!--                <div class="dish-details">-->
+<!--                    <h2>{{ dish.name }}</h2>-->
+<!--                    <h2>{{ dish.price }}</h2>-->
+<!--                    <form method="post" action="{% url 'add_to_cart' dish.id %}">-->
+<!--                        {% csrf_token %}-->
+<!--                        <input type="hidden" name="selected_dish_ids" value="{{ dish.id }}">-->
+<!--                        <button type="submit" class="order-button">Add to cart</button>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        {% endfor %}-->
+<!--    </div>-->
+<!--</div>-->
+
+
+<div class="parallax-container">
+    <h2>Welcome to TasteRush</h2>
+    <p>Discover the finest cuisine in town.</p>
+</div>
+
+<div class="container">
+    <!-- Random additional content -->
+    <div class="random-content">
+        <h2>Special Offers</h2>
+        <p>Check out our daily specials and enjoy great discounts on your favorite dishes.</p>
+    </div>
+    <div class="logo">
+        <img src="{% static 'logo1_ (1).png' %}" alt="Logo">
+    </div>
+</div>
+<div class="additional-content">
+    <!-- Add your additional content here, such as scrolling down the page with contact us details -->
+    <h2>Contact Us</h2>
+    <div class="contact-details">
+        <p>Email: tasterush@gmail.com</p>
+        <p>Phone: +91 9177943431</p>
+        <p>Phone: +91 8019885947</p>
+        <p>Address: KL University, Vijayawada</p>
+        <div class="logo">
+<!--        <img src="{% static 'logo1_ (1).png' %}" alt="Logo">-->
+    </div>
+    </div>
+
+</div>
+
+<footer class="footer">
+    <div class="container">
+        &copy; 2023 TasteRush. All rights reserved.
+    </div>
+</footer>
+
+<!-- Your JavaScript code can go here if needed -->
+<input type="hidden" id="user_latitude" name="user_latitude">
+<input type="hidden" id="user_longitude" name="user_longitude">
+
+<script>
+    // Function to update the location display with the place name and store latitude and longitude
+    function updateLocation(position) {
+        const locationElement = document.getElementById('current-location');
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        // Use the Nominatim API to get the location name
+        const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10`;
+
+        fetch(nominatimUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (data.display_name) {
+                    const placeName = data.display_name.split(',')[0];
+                    locationElement.textContent = `Current Location: ${placeName}`;
+                } else {
+                    locationElement.textContent = 'Location not found.';
+                }
+            })
+            .catch(error => {
+                locationElement.textContent = 'Error fetching location data.';
+            });
+
+        // Update the link to nearby restaurants
+        // Update the link to nearby restaurants
+    const nearbyRestaurantsLink = document.getElementById('nearby-restaurants-link');
+    nearbyRestaurantsLink.href = `/nearby_restaurants/${latitude}/${longitude}/`;
+
+    }
+
+    // Function to handle geolocation errors
+    function handleLocationError(error) {
+        const locationElement = document.getElementById('current-location');
+        locationElement.textContent = 'Unable to retrieve location.';
+    }
+
+    // Check if Geolocation is supported by the browser
+    if ('geolocation' in navigator) {
+        // Get the user's current position
+        navigator.geolocation.getCurrentPosition(updateLocation, handleLocationError);
+    } else {
+        const locationElement = document.getElementById('current-location');
+        locationElement.textContent = 'Geolocation is not supported by your browser.';
+    }
+</script>
+{% block 'body' %}
+{% endblock %}
+</body>
+</html>
+
+
+
